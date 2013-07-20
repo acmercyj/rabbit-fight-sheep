@@ -47,6 +47,7 @@ public:
 	void setHeroPath(string path) { m_heroPath = path; }
 
 public:
+	//CREATE_FUNC(Hero);
 	// initial hero pos
 	void init(CCLayer* layer, CCPoint pos);
 

@@ -63,10 +63,10 @@ void MapLayer::setView()
 	// add plist
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Sprite/sprite.plist", "Sprite/sprite.png");
 	m_sheepManager = SheepManager::create();
+	this->addChild(m_sheepManager, 2);
 	initHero();
 	this->schedule(schedule_selector(MapLayer::setViewPointCenter));
 //	this->schedule(schedule_selector(SheepManager::addSheep), 1.0f);
-	
 }
 
 bool MapLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -85,6 +85,7 @@ void MapLayer::registerWithTouchDispatcher(void)
 
 void MapLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
+	m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
 	onTouchEndedEventSyn(m_hero);
 	// TODO:del
 	onTouchEndedEventSyn(m_darkhero);
@@ -99,6 +100,8 @@ void MapLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 
 void MapLayer::initHero()
 {
+	/*m_hero = Hero::create();
+	m_darkhero = Hero::create();*/
 	CCTMXObjectGroup* objects = m_tileMap->objectGroupNamed("hero");
 	CCDictionary* heroPoint;
 	CCDictionary* darkheroPoint;
