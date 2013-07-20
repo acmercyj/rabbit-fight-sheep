@@ -27,9 +27,10 @@ public:
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void registerWithTouchDispatcher(void);
 
-	//
+	// timer callback
 private:
 	void setViewPointCenter(float dt);
+	void addSheep(float dt);
 
 public:
 	/** game map **/
@@ -42,26 +43,30 @@ public:
 	Hero* m_darkhero;
 	/** sheep mgr **/
 	SheepManager* m_sheepManager;
+	/** rabbit mgr **/
+	SheepManager* m_rabbitManager;
 
 public:
 	// hero side
-	void setHeroSide(bool isGrass = false) { m_grass = isGrass; }
-	bool getHeroSide() { return m_grass; }
+	void setHeroSide(bool isGrass = false) { m_above = isGrass; }
+	bool getHeroSide() { return m_above; }
 	// initial hero pos
 	void setHeroPosition();
 
 private:
 	/** pos flag **/
-	bool m_grass;
+	bool m_above;
+	CCPoint m_rabbitPoint;
+	CCPoint m_sheepPoint;
 
 protected:
 private:
 	// touch action
-	void onTouchEventSyn(Hero* hero, CCPoint destination);
+	void onTouchEventSyn(Hero* hero, SheepManager* sheepMgr, CCPoint destination);
 	// move action
-	void onMoveSyn(Hero* hero, CCPoint destination);
+	void onMoveSyn(Hero* hero, SheepManager* sheepMgr, CCPoint destination);
 	// touch ended
-	void onTouchEndedEventSyn(Hero* hero);
+	void onTouchEndedEventSyn(Hero* hero, SheepManager* sheepMgr);
 };
 
 #endif

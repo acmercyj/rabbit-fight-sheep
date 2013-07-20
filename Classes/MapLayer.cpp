@@ -1,7 +1,7 @@
 #include "MapLayer.h"
 #include "DataDefine.h"
 
-MapLayer::MapLayer() : m_grass(false)
+MapLayer::MapLayer() : m_above(true)
 {
 	/*m_hero = new Hero();
 	m_darkhero = new Hero();*/
@@ -63,6 +63,8 @@ void MapLayer::setView()
 	// add plist
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Sprite/sprite.plist", "Sprite/sprite.png");
 	m_sheepManager = SheepManager::create();
+	m_rabbitManager = SheepManager::create();
+	this->addChild(m_rabbitManager, 2);
 	this->addChild(m_sheepManager, 2);
 	m_hero = Hero::create();
 	m_darkhero = Hero::create();
@@ -70,14 +72,14 @@ void MapLayer::setView()
 	this->addChild(m_hero, 2);
 	this->addChild(m_darkhero, 2);
 	this->schedule(schedule_selector(MapLayer::setViewPointCenter));
-//	this->schedule(schedule_selector(SheepManager::addSheep), 1.0f);
+	this->schedule(schedule_selector(MapLayer::addSheep), 3.0f);
 }
 
 bool MapLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	onTouchEventSyn(m_hero, convertTouchToNodeSpace(pTouch));
+	onTouchEventSyn(m_hero, m_sheepManager, convertTouchToNodeSpace(pTouch));
 	// TODO:del
-	onTouchEventSyn(m_darkhero, convertTouchToNodeSpace(pTouch));
+	onTouchEventSyn(m_darkhero, m_rabbitManager, convertTouchToNodeSpace(pTouch));
 	//  return false to ignore the touch ended event
 	return true;
 }
@@ -89,63 +91,85 @@ void MapLayer::registerWithTouchDispatcher(void)
 
 void MapLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
-	onTouchEndedEventSyn(m_hero);
+	//m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
+	onTouchEndedEventSyn(m_hero, m_sheepManager);
 	// TODO:del
-	onTouchEndedEventSyn(m_darkhero);
+	onTouchEndedEventSyn(m_darkhero, m_rabbitManager);
 }
 
 void MapLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
-	onMoveSyn(m_hero, convertTouchToNodeSpace(pTouch));
+	onMoveSyn(m_hero, m_sheepManager, convertTouchToNodeSpace(pTouch));
 	// TODO:del
-	onMoveSyn(m_darkhero, convertTouchToNodeSpace(pTouch));
+	onMoveSyn(m_darkhero, m_rabbitManager, convertTouchToNodeSpace(pTouch));
 }
 
 void MapLayer::setHeroPosition()
 {
-	/*m_hero = Hero::create();
-	m_darkhero = Hero::create();*/
 	CCTMXObjectGroup* objects = m_tileMap->objectGroupNamed("hero");
 	CCDictionary* heroPoint;
 	CCDictionary* darkheroPoint;
-	if(m_grass)
+
+	CCDictionary* rabbit;
+	CCDictionary* sheep;
+	if(m_above)
 	{
 		heroPoint = objects->objectNamed("grasshero");
 		darkheroPoint = objects->objectNamed("landhero");
+		sheep = objects->objectNamed("rabbit");
+		rabbit = objects->objectNamed("sheep");
 	}
 	else
 	{
 		heroPoint = objects->objectNamed("landhero");
 		darkheroPoint = objects->objectNamed("grasshero");
+		sheep = objects->objectNamed("sheep");
+		rabbit = objects->objectNamed("rabbit");
 	}
 	
-	float x = heroPoint->valueForKey("x")->floatValue();
-	float y = heroPoint->valueForKey("y")->floatValue();
-	m_hero->setPosition(ccp(x, y));
+	m_hero->setPosition(ccp(heroPoint->valueForKey("x")->floatValue(), heroPoint->valueForKey("y")->floatValue()));
 
-	m_sheepManager->addSheep(ccp(x + 30, y +30));
-	m_sheepManager->addSheep(ccp(x + 20, y +20));
-	m_sheepManager->addSheep(ccp(40, 40));
+	m_darkhero->setPosition(ccp(darkheroPoint->valueForKey("x")->floatValue(), darkheroPoint->valueForKey("y")->floatValue()));
 
-	x = darkheroPoint->valueForKey("x")->floatValue();
-	y = darkheroPoint->valueForKey("y")->floatValue();
-	m_darkhero->setPosition(ccp(x, y));
+	
+	m_rabbitPoint = ccp(rabbit->valueForKey("x")->floatValue(), rabbit->valueForKey("y")->floatValue());
+	m_sheepPoint= ccp(sheep->valueForKey("x")->floatValue(), sheep->valueForKey("y")->floatValue());
 }
 
-void MapLayer::onTouchEventSyn(Hero* hero, CCPoint destination)
+void MapLayer::onTouchEventSyn(Hero* hero, SheepManager* sheepMgr, CCPoint destination)
 {
 	hero->heroRotate();
-	onMoveSyn(hero, destination);
+	onMoveSyn(hero, sheepMgr, destination);
 }
 
-void MapLayer::onMoveSyn(Hero* hero, CCPoint destination)
+void MapLayer::onMoveSyn(Hero* hero, SheepManager* sheepMgr, CCPoint destination)
 {
-	m_sheepManager->onDestinationMoved(destination);
+	sheepMgr->onDestinationMoved(destination);
 	hero->heroMoveTo(destination);
 }
 
-void MapLayer::onTouchEndedEventSyn(Hero* hero)
+void MapLayer::onTouchEndedEventSyn(Hero* hero, SheepManager* sheepMgr)
 {
+	sheepMgr->onDestinationMoved(hero->m_hero->getPosition());
 	hero->stopContrl();
+}
+
+void MapLayer::addSheep(float dt)
+{
+// 	CCPoint downCenter = ccp(getWinSize().width / 2, getWinSize().height / 2 / 2);
+// 
+// 	CCPoint upCenter = ccp(downCenter.x, downCenter.y * 3);
+
+// 	if(m_above)
+// 	{
+	m_sheepManager->addSheep(m_sheepPoint);
+	m_rabbitManager->addSheep(m_rabbitPoint);
+// 	}
+// 	else
+// 	{
+// 		m_sheepManager->addSheep(downCenter);
+// 		m_rabbitManager->addSheep(upCenter);
+// 	}
+	m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
+	m_rabbitManager->onDestinationMoved(m_darkhero->m_hero->getPosition());
 }
