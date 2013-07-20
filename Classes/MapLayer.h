@@ -48,7 +48,7 @@ public:
 	void setHeroSide(bool isGrass = false) { m_grass = isGrass; }
 	bool getHeroSide() { return m_grass; }
 	// initial hero pos
-	void initHero();
+	void setHeroPosition();
 
 private:
 	/** pos flag **/

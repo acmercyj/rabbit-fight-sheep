@@ -32,22 +32,23 @@ CCAction* Sheep::createRotateAction(float timeDelay)
 	return action;
 }
 
-void Sheep::init(CCLayer* layer, CCPoint pos)
+bool Sheep::init()
 {
+	if(!__super::init())
+	{
+		return false;
+	}
 	m_sheep = CCSprite::createWithSpriteFrameName(m_path.c_str());
 	CCAction* action = createRotateAction(0.2f);
 	action->setTag(EASswing);
 	m_sheep->runAction(action);
-	m_sheep->setPosition(pos);
-	layer->addChild(m_sheep, 2);
-	//setDestination(((MapLayer*)layer)->m_hero);
-	//aiContrlCallBack(0.0f);
+	addChild(m_sheep, 2);
+	return true;
 }
 
 void Sheep::moveToDestion(CCPoint destination)
 {
 	m_sheep->stopActionByTag(EASmoveTo);
-	//CCPoint destination = m_destination->getPosition();
 	float distance = StaticMethod::getDistance(&destination, &m_sheep->getPosition());
 	float duration = distance / getSpeed();
 	CCMoveTo* moveToAction = CCMoveTo::create(duration, destination);
@@ -55,16 +56,17 @@ void Sheep::moveToDestion(CCPoint destination)
 	m_sheep->runAction(moveToAction);
 }
 
+void Sheep::setSheepPos(CCPoint pos)
+{
+	m_sheep->setPosition(pos);
+}
+
 bool SheepManager::init()
 {
-	if(!BasicLayer::init())
+	if(!__super::init())
 	{
 		return false;
 	}
-	//m_sheepBN = new CCSpriteBatchNode();
-		//CCSpriteBatchNode::create("sheep_1.png" );
-	//this->addChild(m_sheepBN);
-	//  4.初始化数组
 	m_sheepArr = CCArray::create();
 	m_sheepArr->retain();
 	this->schedule(schedule_selector(SheepManager::moveAllSheep), 2.0f);
@@ -82,10 +84,10 @@ void SheepManager::moveAllSheep(float dt)
 	}
 }
 
-void SheepManager::addSheep(CCLayer* layer, CCPoint point)
+void SheepManager::addSheep(CCPoint point)
 {
-	Sheep* sheep = new Sheep();
-	sheep->init(layer, point);
+	Sheep* sheep = Sheep::create();
+	sheep->setSheepPos(point);
+	this->addChild(sheep, 2);
 	m_sheepArr->addObject(sheep);
-	//m_sheepBN->addChild(sheep);
 }

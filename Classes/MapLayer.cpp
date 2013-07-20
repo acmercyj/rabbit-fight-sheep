@@ -3,15 +3,15 @@
 
 MapLayer::MapLayer() : m_grass(false)
 {
-	m_hero = new Hero();
-	m_darkhero = new Hero();
+	/*m_hero = new Hero();
+	m_darkhero = new Hero();*/
 	//m_sheepManager = new SheepManager();
 }
 
 MapLayer::~MapLayer()
 {
-	delete m_hero;
-	delete m_darkhero;
+	/*delete m_hero;
+	delete m_darkhero;*/
 	//delete m_sheepManager;
 }
 
@@ -20,7 +20,7 @@ bool MapLayer::init()
 	bool succeed = false;
 	do 
 	{
-		CC_BREAK_IF(!BasicLayer::init());
+		CC_BREAK_IF(!__super::init());
 		setView();
 		this->setTouchEnabled(true);
 		succeed = true;
@@ -64,7 +64,11 @@ void MapLayer::setView()
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Sprite/sprite.plist", "Sprite/sprite.png");
 	m_sheepManager = SheepManager::create();
 	this->addChild(m_sheepManager, 2);
-	initHero();
+	m_hero = Hero::create();
+	m_darkhero = Hero::create();
+	setHeroPosition();
+	this->addChild(m_hero, 2);
+	this->addChild(m_darkhero, 2);
 	this->schedule(schedule_selector(MapLayer::setViewPointCenter));
 //	this->schedule(schedule_selector(SheepManager::addSheep), 1.0f);
 }
@@ -98,7 +102,7 @@ void MapLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	onMoveSyn(m_darkhero, convertTouchToNodeSpace(pTouch));
 }
 
-void MapLayer::initHero()
+void MapLayer::setHeroPosition()
 {
 	/*m_hero = Hero::create();
 	m_darkhero = Hero::create();*/
@@ -118,15 +122,15 @@ void MapLayer::initHero()
 	
 	float x = heroPoint->valueForKey("x")->floatValue();
 	float y = heroPoint->valueForKey("y")->floatValue();
-	m_hero->init(this, ccp(x, y));
+	m_hero->setPosition(ccp(x, y));
 
-	m_sheepManager->addSheep(this, ccp(x + 30, y +30));
-	m_sheepManager->addSheep(this, ccp(x + 20, y +20));
-	m_sheepManager->addSheep(this, ccp(40, 40));
+	m_sheepManager->addSheep(ccp(x + 30, y +30));
+	m_sheepManager->addSheep(ccp(x + 20, y +20));
+	m_sheepManager->addSheep(ccp(40, 40));
 
 	x = darkheroPoint->valueForKey("x")->floatValue();
 	y = darkheroPoint->valueForKey("y")->floatValue();
-	m_darkhero->init(this, ccp(x, y));
+	m_darkhero->setPosition(ccp(x, y));
 }
 
 void MapLayer::onTouchEventSyn(Hero* hero, CCPoint destination)

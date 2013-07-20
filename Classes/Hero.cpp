@@ -35,12 +35,15 @@ CCAction* Hero::createRotateAction(float timeDelay)
 	return action;
 }
 
-void Hero::init(CCLayer* layer, CCPoint pos)
+bool Hero::init()
 {
+	if(!__super::init())
+	{
+		return false; 
+	}
 	m_hero = CCSprite::createWithSpriteFrameName(m_heroPath.c_str());
-	m_hero->setPosition(pos);
-	layer->addChild(m_hero, 2);
-	SetStatus(ESstand);
+	addChild(m_hero, 2);
+	return true;
 }
 
 void Hero::heroRotate()
@@ -78,4 +81,11 @@ void Hero::stopContrl()
 		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(m_heroPath.c_str());
 		m_hero->setDisplayFrame(pFrame);
 	}
+}
+
+void Hero::setPosition(CCPoint pos)
+{
+	m_hero->setPosition(pos);
+	//layer->addChild(m_hero, 2);
+	SetStatus(ESstand);
 }
