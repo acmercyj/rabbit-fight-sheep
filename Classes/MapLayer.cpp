@@ -3,16 +3,10 @@
 
 MapLayer::MapLayer() : m_above(true)
 {
-	/*m_hero = new Hero();
-	m_darkhero = new Hero();*/
-	//m_sheepManager = new SheepManager();
 }
 
 MapLayer::~MapLayer()
 {
-	/*delete m_hero;
-	delete m_darkhero;*/
-	//delete m_sheepManager;
 }
 
 bool MapLayer::init()
@@ -91,7 +85,6 @@ void MapLayer::registerWithTouchDispatcher(void)
 
 void MapLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	//m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
 	onTouchEndedEventSyn(m_hero, m_sheepManager);
 	// TODO:del
 	onTouchEndedEventSyn(m_darkhero, m_rabbitManager);
@@ -109,7 +102,6 @@ void MapLayer::setHeroPosition()
 	CCTMXObjectGroup* objects = m_tileMap->objectGroupNamed("hero");
 	CCDictionary* heroPoint;
 	CCDictionary* darkheroPoint;
-
 	CCDictionary* rabbit;
 	CCDictionary* sheep;
 	if(m_above)
@@ -126,12 +118,8 @@ void MapLayer::setHeroPosition()
 		sheep = objects->objectNamed("sheep");
 		rabbit = objects->objectNamed("rabbit");
 	}
-	
 	m_hero->setPosition(ccp(heroPoint->valueForKey("x")->floatValue(), heroPoint->valueForKey("y")->floatValue()));
-
 	m_darkhero->setPosition(ccp(darkheroPoint->valueForKey("x")->floatValue(), darkheroPoint->valueForKey("y")->floatValue()));
-
-	
 	m_rabbitPoint = ccp(rabbit->valueForKey("x")->floatValue(), rabbit->valueForKey("y")->floatValue());
 	m_sheepPoint= ccp(sheep->valueForKey("x")->floatValue(), sheep->valueForKey("y")->floatValue());
 }
@@ -156,20 +144,8 @@ void MapLayer::onTouchEndedEventSyn(Hero* hero, SheepManager* sheepMgr)
 
 void MapLayer::addSheep(float dt)
 {
-// 	CCPoint downCenter = ccp(getWinSize().width / 2, getWinSize().height / 2 / 2);
-// 
-// 	CCPoint upCenter = ccp(downCenter.x, downCenter.y * 3);
-
-// 	if(m_above)
-// 	{
 	m_sheepManager->addSheep(m_sheepPoint);
 	m_rabbitManager->addSheep(m_rabbitPoint);
-// 	}
-// 	else
-// 	{
-// 		m_sheepManager->addSheep(downCenter);
-// 		m_rabbitManager->addSheep(upCenter);
-// 	}
 	m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
 	m_rabbitManager->onDestinationMoved(m_darkhero->m_hero->getPosition());
 }

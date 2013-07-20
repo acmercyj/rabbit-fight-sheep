@@ -4,10 +4,7 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
-
-
 USING_NS_CC;
-
 using namespace CocosDenshion;
 
 class BasicLayer : public CCLayer
@@ -25,4 +22,4 @@ public:
 	void setBackgroundImage(const char* back_image_name);
 };
 
-#endif /* defined(__MyMoonWarrior__BasicLayer__) */
+#endif

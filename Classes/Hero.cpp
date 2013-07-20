@@ -86,6 +86,5 @@ void Hero::stopContrl()
 void Hero::setPosition(CCPoint pos)
 {
 	m_hero->setPosition(pos);
-	//layer->addChild(m_hero, 2);
 	SetStatus(ESstand);
 }
