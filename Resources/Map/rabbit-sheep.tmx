@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="40" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Tile02" tilewidth="32" tileheight="32">
+  <image source="Tile02.png" trans="ff00ff" width="512" height="768"/>
+ </tileset>
+ <layer name="map" width="20" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzbwsDAsGUUj+IRhk2Q8FAwdxQPDXyEynjTIMdKjNTFhlTGVxioi1kYR/EoHsWjeBRTAwMAACY1GA==
+  </data>
+ </layer>
+ <objectgroup name="hero" width="20" height="40">
+  <object name="grasshero" x="161" y="482"/>
+  <object name="landhero" x="203" y="859"/>
+ </objectgroup>
+</map>

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{d4dc56a4-7878-403e-ad64-33f22719061f}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{a731b34f-54e8-46fe-897e-e419736a9ba5}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{dea8c539-066b-4633-b6df-f0577c543bbb}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;png;manifest</Extensions>
+    </Filter>
+    <Filter Include="include\Layer">
+      <UniqueIdentifier>{8b1211a4-928c-442d-a85a-58e178527fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Layer">
+      <UniqueIdentifier>{65df8a98-3044-41e6-b0fa-d84b7228bca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Util">
+      <UniqueIdentifier>{10220206-68ba-41b0-a64d-8e9f1b780532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Util">
+      <UniqueIdentifier>{7dff4144-2e91-416b-b486-fbe2ab54edcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Object">
+      <UniqueIdentifier>{42b29fad-a2a5-479e-b006-f58755188c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Object">
+      <UniqueIdentifier>{b10dba4a-f6d2-4df2-9119-09b2a1535cf8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\rabbit_fight_sheep.ico">
+      <Filter>resource</Filter>
+    </None>
+    <None Include="..\Resources\CloseSelected.png">
+      <Filter>resource</Filter>
+    </None>
+    <None Include="..\Resources\CloseNormal.png">
+      <Filter>resource</Filter>
+    </None>
+    <None Include="..\Resources\HelloWorld.png">
+      <Filter>resource</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="rabbit_fight_sheep.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BasicLayer.h">
+      <Filter>include\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapLayer.h">
+      <Filter>include\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MenuLayer.h">
+      <Filter>include\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\DataDefine.h">
+      <Filter>include\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BasicObject.h">
+      <Filter>include\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Hero.h">
+      <Filter>include\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Sheep.h">
+      <Filter>include\Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BasicLayer.cpp">
+      <Filter>source\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MapLayer.cpp">
+      <Filter>source\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MenuLayer.cpp">
+      <Filter>source\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BasicObject.cpp">
+      <Filter>source\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Hero.cpp">
+      <Filter>source\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Sheep.cpp">
+      <Filter>source\Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
