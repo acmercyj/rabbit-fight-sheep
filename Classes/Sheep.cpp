@@ -34,7 +34,7 @@ CCAction* Sheep::createRotateAction(float timeDelay)
 
 bool Sheep::init()
 {
-	if(!__super::init())
+	if(!BasicLayer::init())
 	{
 		return false;
 	}
@@ -63,7 +63,7 @@ void Sheep::setSheepPos(CCPoint pos)
 
 bool SheepManager::init()
 {
-	if(!__super::init())
+	if(!BasicLayer::init())
 	{
 		return false;
 	}

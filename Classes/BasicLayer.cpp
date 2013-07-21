@@ -9,12 +9,12 @@ BasicLayer::~BasicLayer()
 
 }
 
-bool BasicLayer::init(){
-
+bool BasicLayer::init()
+{
 	bool sRect = false;
-	do {
-		CC_BREAK_IF( !CCLayer::init() );
-
+	do
+	{
+		CC_BREAK_IF(!CCLayer::init());
 		sRect = true;
 	} while(0);
 

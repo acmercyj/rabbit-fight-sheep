@@ -14,7 +14,7 @@ bool MapLayer::init()
 	bool succeed = false;
 	do 
 	{
-		CC_BREAK_IF(!__super::init());
+		CC_BREAK_IF(!BasicLayer::init());
 		setView();
 		this->setTouchEnabled(true);
 		succeed = true;
@@ -40,10 +40,10 @@ void MapLayer::setViewPointCenter(float dt)
 {
 	CCPoint pos = m_hero->m_hero->getPosition();
 	CCSize winSize = getWinSize();
-	int x = max(pos.x, winSize.width / 2);
-	int y = max(pos.y, winSize.height / 2);
-	x = min(x, (m_tileMap->getMapSize().width * m_tileMap->getTileSize().width) - winSize.width / 2);
-	y = min(y, (m_tileMap->getMapSize().height * m_tileMap->getTileSize().height) - winSize.height / 2);
+	float x = StaticMethod::sm_max(pos.x, winSize.width / 2);
+	float y = StaticMethod::sm_max(pos.y, winSize.height / 2);
+	x = StaticMethod::sm_min(x, (m_tileMap->getMapSize().width * m_tileMap->getTileSize().width) - winSize.width / 2);
+	y = StaticMethod::sm_min(y, (m_tileMap->getMapSize().height * m_tileMap->getTileSize().height) - winSize.height / 2);
 	CCPoint actualPosition = ccp(x, y);
 	CCPoint centerOfView = ccp(winSize.width / 2, winSize.height / 2);
 	CCPoint viewPoint = ccpSub(centerOfView, actualPosition);

@@ -15,6 +15,14 @@ public:
 	{
 		return sqrt((orin->x - destination->x) * (orin->x - destination->x) + (orin->y - destination->y) * (orin->y - destination->y));
 	}
+	static float sm_max(float x, float y) 
+	{
+		return x > y ? x : y;
+	}
+	static float sm_min(float x, float y)
+	{
+		return x < y ? x : y;
+	}
 };
 
 #endif

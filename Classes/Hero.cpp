@@ -37,7 +37,7 @@ CCAction* Hero::createRotateAction(float timeDelay)
 
 bool Hero::init()
 {
-	if(!__super::init())
+	if(!BasicLayer::init())
 	{
 		return false; 
 	}
