@@ -5,6 +5,7 @@
 #include <vector>
 using std::string;
 using std::vector;
+//#include "Box2D/Box2D.h"
 #include "DataDefine.h"
 #include "BasicObject.h"
 
@@ -25,7 +26,7 @@ enum SpriteAnimationID
 	Erotate
 };
 
-class Hero : public BasicObject
+class Hero : public BasicObject , public CCObject
 {
 public:
 	Hero();
@@ -47,9 +48,13 @@ public:
 	void setHeroPath(string path) { m_heroPath = path; }
 
 public:
-	CREATE_FUNC(Hero);
+	
+	static Hero* create(CCLayer* layer, CCPoint pos);
+	void attachBodyForSprite(b2World* world);
 
-	virtual bool init();
+	//CREATE_FUNC(Hero);
+
+	bool init(CCPoint pos);
 
 	void setPosition(CCPoint pos);
 

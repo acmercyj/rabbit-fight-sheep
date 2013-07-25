@@ -31,6 +31,12 @@
     <Filter Include="source\Object">
       <UniqueIdentifier>{b10dba4a-f6d2-4df2-9119-09b2a1535cf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\external">
+      <UniqueIdentifier>{0ab7518b-1a9f-4eaa-a1ef-f1f4a7e41422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\external">
+      <UniqueIdentifier>{adfe357e-769f-4929-b2df-94cdf4b22c4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\rabbit_fight_sheep.ico">
@@ -82,6 +88,9 @@
     <ClInclude Include="..\Classes\Sheep.h">
       <Filter>include\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GLES-Render.h">
+      <Filter>include\external</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Sheep.cpp">
       <Filter>source\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GLES-Render.cpp">
+      <Filter>source\external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

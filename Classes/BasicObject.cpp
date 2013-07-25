@@ -35,7 +35,7 @@ bool BasicObject::onAttacked(int attack, bool continuing, float duration)
 			m_hitPoints -= realAttack;
 			if(m_hitPoints <= 0)
 			{
-				this->unscheduleAllSelectors();
+//				this->unscheduleAllSelectors();
 				setDead(true);
 			}
 		}
@@ -54,7 +54,7 @@ bool BasicObject::onContinuingInjury(int CIVal, float duration, float interval)
 		setContinuingInjury(true);
 		setContinuingInjuryVal(CIVal);
 	}
-	this->schedule(schedule_selector(BasicObject::continuingInjuryCallBack), interval, (int)(duration / interval), 0.1f);
+//	this->schedule(schedule_selector(BasicObject::continuingInjuryCallBack), interval, (int)(duration / interval), 0.1f);
 	return true;
 }
 

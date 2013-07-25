@@ -3,10 +3,12 @@
 
 MapLayer::MapLayer() : m_above(true)
 {
+	//m_box2dHandler = new Box2dHandler();
 }
 
 MapLayer::~MapLayer()
 {
+	//delete m_box2dHandler;
 }
 
 bool MapLayer::init()
@@ -38,7 +40,11 @@ CCScene* MapLayer::scene()
 
 void MapLayer::setViewPointCenter(float dt)
 {
-	CCPoint pos = m_hero->m_hero->getPosition();
+	CCPoint pos = m_heroPoint;
+	if(m_hero->m_hero)
+	{
+		pos = m_hero->m_hero->getPosition();
+	}
 	CCSize winSize = getWinSize();
 	float x = StaticMethod::sm_max(pos.x, winSize.width / 2);
 	float y = StaticMethod::sm_max(pos.y, winSize.height / 2);
@@ -53,20 +59,32 @@ void MapLayer::setViewPointCenter(float dt)
 void MapLayer::setView()
 {
 	m_tileMap = CCTMXTiledMap::create(TILEMAP_PATH);
+	//m_box2dHandler->initBox2D(m_tileMap->getMapSize());
 	this->addChild(m_tileMap, 1);
 	// add plist
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Sprite/sprite.plist", "Sprite/sprite.png");
-	m_sheepManager = SheepManager::create();
-	m_rabbitManager = SheepManager::create();
-	this->addChild(m_rabbitManager, 2);
-	this->addChild(m_sheepManager, 2);
-	m_hero = Hero::create();
-	m_darkhero = Hero::create();
-	setHeroPosition();
-	this->addChild(m_hero, 2);
-	this->addChild(m_darkhero, 2);
+	
+	/*this->addChild(m_rabbitManager, 2);
+	this->addChild(m_sheepManager, 2);*/
+
+	initBox2dWorld();
+	initSpritePosition();
+	m_sheepManager = SheepManager::create(this);
+	m_sheepManager->setExternalData(m_world, m_sheepPoint);
+	m_rabbitManager = SheepManager::create(this);
+	m_rabbitManager->setExternalData(m_world, m_rabbitPoint);
+
+
+
+	m_hero = Hero::create(this, m_heroPoint);
+	m_hero->attachBodyForSprite(m_world);
+	m_darkhero = Hero::create(this, m_darkHeroPoint);
+	m_darkhero->attachBodyForSprite(m_world);
+	//m_hero->m_hero->m_b2Body
 	this->schedule(schedule_selector(MapLayer::setViewPointCenter));
 	this->schedule(schedule_selector(MapLayer::addSheep), 3.0f);
+
+	//this->schedule(schedule_selector(Box2dHandler::update));
 }
 
 bool MapLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -97,7 +115,7 @@ void MapLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	onMoveSyn(m_darkhero, m_rabbitManager, convertTouchToNodeSpace(pTouch));
 }
 
-void MapLayer::setHeroPosition()
+void MapLayer::initSpritePosition()
 {
 	CCTMXObjectGroup* objects = m_tileMap->objectGroupNamed("hero");
 	CCDictionary* heroPoint;
@@ -118,8 +136,8 @@ void MapLayer::setHeroPosition()
 		sheep = objects->objectNamed("sheep");
 		rabbit = objects->objectNamed("rabbit");
 	}
-	m_hero->setPosition(ccp(heroPoint->valueForKey("x")->floatValue(), heroPoint->valueForKey("y")->floatValue()));
-	m_darkhero->setPosition(ccp(darkheroPoint->valueForKey("x")->floatValue(), darkheroPoint->valueForKey("y")->floatValue()));
+	m_heroPoint = (ccp(heroPoint->valueForKey("x")->floatValue(), heroPoint->valueForKey("y")->floatValue()));
+	m_darkHeroPoint = (ccp(darkheroPoint->valueForKey("x")->floatValue(), darkheroPoint->valueForKey("y")->floatValue()));
 	m_rabbitPoint = ccp(rabbit->valueForKey("x")->floatValue(), rabbit->valueForKey("y")->floatValue());
 	m_sheepPoint= ccp(sheep->valueForKey("x")->floatValue(), sheep->valueForKey("y")->floatValue());
 }
@@ -144,8 +162,42 @@ void MapLayer::onTouchEndedEventSyn(Hero* hero, SheepManager* sheepMgr)
 
 void MapLayer::addSheep(float dt)
 {
-	m_sheepManager->addSheep(m_sheepPoint);
-	m_rabbitManager->addSheep(m_rabbitPoint);
+	m_sheepManager->addSheep();
+	m_rabbitManager->addSheep();
 	m_sheepManager->onDestinationMoved(m_hero->m_hero->getPosition());
 	m_rabbitManager->onDestinationMoved(m_darkhero->m_hero->getPosition());
+}
+
+void MapLayer::initBox2dWorld()
+{
+	b2Vec2 gravity;
+	gravity.Set(0.0f, 0.0f);
+	m_world = new b2World(gravity);
+	//m_world->set
+	m_world->SetAllowSleeping(true);
+	m_world->SetContinuousPhysics(true);
+
+	//     m_debugDraw = new GLESDebugDraw( PTM_RATIO );
+	//     world->SetDebugDraw(m_debugDraw);
+
+	uint32 flags = 0;
+	flags += b2Draw::e_shapeBit;
+	//        flags += b2Draw::e_jointBit;
+	//        flags += b2Draw::e_aabbBit;
+	//        flags += b2Draw::e_pairBit;
+	//        flags += b2Draw::e_centerOfMassBit;
+	//m_debugDraw->SetFlags(flags);
+
+
+	// Define the ground body.
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0, 0); // bottom-left corner
+
+	// Call the body factory which allocates memory for the ground body
+	// from a pool and creates the ground box shape (also from a pool).
+	// The body is also added to the world.
+	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
+
+	//// Define the ground box shape.
+	b2EdgeShape groundBox;
 }

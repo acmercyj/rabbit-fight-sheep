@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "BasicLayer.h"
+//#include "Box2dHandler.h"
 #include "Hero.h"
 #include "Sheep.h"
 using namespace cocos2d;
@@ -45,21 +46,28 @@ public:
 	SheepManager* m_sheepManager;
 	/** rabbit mgr **/
 	SheepManager* m_rabbitManager;
+	//Box2dHandler* m_box2dHandler;
 
 public:
 	// hero side
 	void setHeroSide(bool isGrass = false) { m_above = isGrass; }
 	bool getHeroSide() { return m_above; }
 	// initial hero pos
-	void setHeroPosition();
+	void initSpritePosition();
+	void initBox2dWorld();
 
 private:
 	/** pos flag **/
 	bool m_above;
+	CCPoint m_heroPoint;
+	CCPoint m_darkHeroPoint;
 	CCPoint m_rabbitPoint;
 	CCPoint m_sheepPoint;
 
 protected:
+	/** writehere **/
+	b2World* m_world;
+
 private:
 	// touch action
 	void onTouchEventSyn(Hero* hero, SheepManager* sheepMgr, CCPoint destination);

@@ -2,10 +2,11 @@
 #define __BASIC_OBJECT__
 
 #include "cocos2d.h"
+#include "Box2D/Box2D.h"
 #include "BasicLayer.h"
 using namespace cocos2d;
 
-class BasicObject : public BasicLayer
+class BasicObject// : public BasicLayer
 {
 public:
 	BasicObject();
@@ -70,6 +71,20 @@ protected:
 protected:
 	bool m_dead;
 	bool m_continuingInjury;
+
+	// box2d
+public:
+	/** writehere **/
+	CC_SYNTHESIZE(b2Body*, m_b2Body, B2Body);
 };
+
+//class B2Sprite : public CCSprite
+//{
+//	//B2Sprite() { m_b2Body = new b2Body(); }
+//	// box2d
+//public:
+//	/** writehere **/
+//	CC_SYNTHESIZE(b2Body*, m_b2Body, B2Body);
+//};
 
 #endif

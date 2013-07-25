@@ -8,6 +8,7 @@ using std::vector;
 #include "DataDefine.h"
 #include "BasicObject.h"
 #include "Hero.h"
+//#include "Box2dHandler.h"
 
 enum SheepActionTag
 {
@@ -15,7 +16,7 @@ enum SheepActionTag
 	EASmoveTo
 };
 
-class Sheep : public BasicObject
+class Sheep : public BasicObject , public CCObject
 {
 public:
 	Sheep();
@@ -37,9 +38,12 @@ public:
 	void setPath(string path) { m_path = path; }
 
 public:
-	CREATE_FUNC(Sheep);
+	//CREATE_FUNC(Sheep);
+
+	static Sheep* create(CCLayer* layer, CCPoint pos);
+	void attachBodyForSprite(b2World* world);
 	
-	virtual bool init();
+	bool init(CCPoint pos);
 
 	void setSheepPos(CCPoint pos);
 
@@ -53,18 +57,24 @@ public:
 	CCSprite* m_sheep;
 };
 
-class SheepManager : public BasicLayer
+class SheepManager : public CCLayer
 {
 public:
 	virtual bool init();
 
-	CREATE_FUNC(SheepManager);
+	static SheepManager* create(CCLayer* layer);
+	void setExternalData(b2World* world, CCPoint pos);
+	//CREATE_FUNC(SheepManager);
 	/** sheep **/
 	CC_SYNTHESIZE_READONLY(CCArray*, m_sheepArr, SheepArr);
 	void moveAllSheep(float dt);
-	void addSheep(CCPoint point);
+	void addSheep();
 
 	void onDestinationMoved(CCPoint point) { m_destination = point; }
+
+public:
+	b2World* m_world;
+	CCPoint m_startPos;
 
 private:
 	CCPoint m_destination;
