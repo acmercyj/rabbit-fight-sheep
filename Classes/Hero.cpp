@@ -46,6 +46,7 @@ bool Hero::init(CCPoint pos)
 		return false; 
 	}*/
 	m_hero = CCSprite::createWithSpriteFrameName(m_heroPath.c_str());
+	m_hero->setTag(Ehero);
 	m_hero->setPosition(pos);
 	//m_hero = dynamic_cast<B2Sprite*>(CCSprite::createWithSpriteFrameName(m_heroPath.c_str()));
 		//(B2Sprite*)CCSprite::createWithSpriteFrameName(m_heroPath.c_str());
@@ -101,7 +102,7 @@ Hero* Hero::create(CCLayer* layer, CCPoint pos)
 	Hero* hero = new Hero();
 	if(hero && hero->init(pos))
 	{
-		layer->addChild(hero->m_hero);
+		layer->addChild(hero->m_hero, 3);
 		/*attachBodyForSprite(world);*/
 		hero->autorelease();
 		hero->retain();

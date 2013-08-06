@@ -83,8 +83,7 @@ void MapLayer::setView()
 	//m_hero->m_hero->m_b2Body
 	this->schedule(schedule_selector(MapLayer::setViewPointCenter));
 	this->schedule(schedule_selector(MapLayer::addSheep), 3.0f);
-
-	//this->schedule(schedule_selector(Box2dHandler::update));
+	this->schedule(schedule_selector(MapLayer::physicalUpdate));
 }
 
 bool MapLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -176,28 +175,94 @@ void MapLayer::initBox2dWorld()
 	//m_world->set
 	m_world->SetAllowSleeping(true);
 	m_world->SetContinuousPhysics(true);
-
-	//     m_debugDraw = new GLESDebugDraw( PTM_RATIO );
-	//     world->SetDebugDraw(m_debugDraw);
-
-	uint32 flags = 0;
-	flags += b2Draw::e_shapeBit;
-	//        flags += b2Draw::e_jointBit;
-	//        flags += b2Draw::e_aabbBit;
-	//        flags += b2Draw::e_pairBit;
-	//        flags += b2Draw::e_centerOfMassBit;
-	//m_debugDraw->SetFlags(flags);
+	m_debugDraw = new GLESDebugDraw(PTM_PATIO);
+	m_world->SetDebugDraw(m_debugDraw);
+	// collision detect
+	m_contactListener = new MyContactListener();
+	m_world->SetContactListener(m_contactListener);
 
 
-	// Define the ground body.
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0, 0); // bottom-left corner
+	//uint32 flags = 0;
+	//flags += b2Draw::e_shapeBit;
+	////        flags += b2Draw::e_jointBit;
+	////        flags += b2Draw::e_aabbBit;
+	////        flags += b2Draw::e_pairBit;
+	////        flags += b2Draw::e_centerOfMassBit;
+	////m_debugDraw->SetFlags(flags);
 
-	// Call the body factory which allocates memory for the ground body
-	// from a pool and creates the ground box shape (also from a pool).
-	// The body is also added to the world.
-	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
 
-	//// Define the ground box shape.
-	b2EdgeShape groundBox;
+	//// Define the ground body.
+	//b2BodyDef groundBodyDef;
+	//groundBodyDef.position.Set(0, 0); // bottom-left corner
+
+	//// Call the body factory which allocates memory for the ground body
+	//// from a pool and creates the ground box shape (also from a pool).
+	//// The body is also added to the world.
+	//b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
+
+	////// Define the ground box shape.
+	//b2EdgeShape groundBox;
+}
+
+void MapLayer::physicalUpdate(float dt)
+{
+	if (m_world)
+		m_world->Step(dt, 10, 10);
+
+	// 基于cocos2d的精灵位置来更新box2d的body位置
+	for(b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
+	{
+		if (b->GetUserData() != NULL)
+		{
+			CCSprite* sprite = (CCSprite*)b->GetUserData();
+			if (sprite)
+			{
+				b2Vec2 pt = b2Vec2((float)(sprite->getPosition().x / PTM_PATIO), (float)(sprite->getPosition().y / PTM_PATIO));
+				float angle = (float)CC_DEGREES_TO_RADIANS(sprite->getRotation());
+				b->SetTransform(pt, angle);
+			}
+		}
+	}
+
+	std::list<b2Body*> toDestroy_list;
+
+	for( std::list<MyContact>::iterator it = m_contactListener->contact_list.begin(); 
+		it != m_contactListener->contact_list.end();
+		++it)
+	{
+		MyContact& contact = *it;
+
+		b2Body* bodyA = contact.fixtureA->GetBody();
+		b2Body* bodyB = contact.fixtureB->GetBody();
+
+		CCSprite* sa = (CCSprite*)bodyA->GetUserData();
+		CCSprite* sb = (CCSprite*)bodyB->GetUserData();
+		if (sa && sb)
+		{
+			if (sa->getTag() == Ehero && sb->getTag() == Esheep)
+				toDestroy_list.push_back(bodyB);
+			else if (sa->getTag() == Esheep && sa->getTag() == Ehero)
+				toDestroy_list.push_back(bodyA);
+		}
+	}
+
+	// Destroy contact item.
+	std::list<b2Body*>::iterator it = toDestroy_list.begin();
+	while(it != toDestroy_list.end())
+	{
+		if ((*it)->GetUserData() != NULL)
+		{
+			CCSprite* sprite = (CCSprite*)((*it)->GetUserData());
+			if (sprite)
+			{
+				//sprite->stopActionByTag(EASmoveTo);
+				removeChild(sprite, true);
+			}
+			m_world->DestroyBody(*it);
+		}
+
+		++it;
+	}
+
+	toDestroy_list.clear();
 }

@@ -8,7 +8,13 @@ const char BACKGROUND_IMAGE_PATH[] = {"BackGround/light.jpg"};
 static const char TILEMAP_PATH[] = {"Map/rabbit-sheep.tmx"};
 static const char TILEMAP_LAYER[] = {"rabbit-sheep.tmx"};
 
-const float PTM_PATIO = 32;
+const float PTM_PATIO = 32.0f;
+
+enum ESpriteTag
+{
+	Ehero,
+	Esheep
+};
 
 class StaticMethod
 {

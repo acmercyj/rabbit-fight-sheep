@@ -6,7 +6,51 @@
 //#include "Box2dHandler.h"
 #include "Hero.h"
 #include "Sheep.h"
+#include <list>
+#include "GLES-Render.h"
 using namespace cocos2d;
+
+class MyContact
+{
+public:
+	b2Fixture* fixtureA;
+	b2Fixture* fixtureB;
+};
+
+class MyContactListener : public b2ContactListener
+{
+	// Callbacks for derived classes.
+	virtual void BeginContact(b2Contact* contact) 
+	{ 
+		if (contact)
+		{
+			MyContact mc;
+			mc.fixtureA = contact->GetFixtureA();
+			mc.fixtureB = contact->GetFixtureB();
+
+			contact_list.push_back(mc);
+		}
+	}
+	virtual void EndContact(b2Contact* contact) 
+	{ 
+		contact_list.clear();
+		B2_NOT_USED(contact); 
+	}
+	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+	{
+		B2_NOT_USED(contact);
+		B2_NOT_USED(oldManifold);
+	}
+	virtual void PostSolve(const b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		B2_NOT_USED(contact);
+		B2_NOT_USED(impulse);
+	}
+
+public:
+	std::list<MyContact> contact_list;
+};
+
 
 class MapLayer : public BasicLayer
 {
@@ -55,6 +99,10 @@ public:
 	// initial hero pos
 	void initSpritePosition();
 	void initBox2dWorld();
+	/** 
+	* @brief	physical update
+	**/
+	void physicalUpdate(float dt);
 
 private:
 	/** pos flag **/
@@ -67,6 +115,9 @@ private:
 protected:
 	/** writehere **/
 	b2World* m_world;
+	// Contact event listener
+	MyContactListener* m_contactListener;
+	GLESDebugDraw* m_debugDraw;
 
 private:
 	// touch action

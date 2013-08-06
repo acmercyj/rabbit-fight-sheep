@@ -44,6 +44,7 @@ bool Sheep::init(CCPoint pos)
 	}*/
 	m_sheep = CCSprite::createWithSpriteFrameName(m_path.c_str());
 	m_sheep->setPosition(pos);
+	m_sheep->setTag(Esheep);
 	CCAction* action = createRotateAction(0.2f);
 	action->setTag(EASswing);
 	m_sheep->runAction(action);
@@ -71,9 +72,11 @@ Sheep* Sheep::create(CCLayer* layer, CCPoint pos)
 	Sheep* sheep = new Sheep();
 	if(sheep && sheep->init(pos))
 	{
-		layer->addChild(sheep->m_sheep);
+		layer->addChild(sheep->m_sheep, 3);
 		//attachBodyForSprite(world);
 		sheep->autorelease();
+		//sheep->retain();
+
 		return sheep;
 	}
 	else
@@ -143,7 +146,7 @@ SheepManager* SheepManager::create(CCLayer* layer)
 	SheepManager* sheepMgr = new SheepManager();
 	if(sheepMgr && sheepMgr->init())
 	{
-		layer->addChild(sheepMgr);
+		layer->addChild(sheepMgr, 3);
 		sheepMgr->autorelease();
 		return sheepMgr;
 	}
