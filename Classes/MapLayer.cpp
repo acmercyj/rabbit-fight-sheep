@@ -66,16 +66,12 @@ void MapLayer::setView()
 	
 	/*this->addChild(m_rabbitManager, 2);
 	this->addChild(m_sheepManager, 2);*/
-
 	initBox2dWorld();
 	initSpritePosition();
 	m_sheepManager = SheepManager::create(this);
 	m_sheepManager->setExternalData(m_world, m_sheepPoint);
 	m_rabbitManager = SheepManager::create(this);
 	m_rabbitManager->setExternalData(m_world, m_rabbitPoint);
-
-
-
 	m_hero = Hero::create(this, m_heroPoint);
 	m_hero->attachBodyForSprite(m_world);
 	m_darkhero = Hero::create(this, m_darkHeroPoint);
@@ -239,9 +235,9 @@ void MapLayer::physicalUpdate(float dt)
 		CCSprite* sb = (CCSprite*)bodyB->GetUserData();
 		if (sa && sb)
 		{
-			if (sa->getTag() == Ehero && sb->getTag() == Esheep)
+			//if (sa->getTag() == Ehero && sb->getTag() == Esheep)
 				toDestroy_list.push_back(bodyB);
-			else if (sa->getTag() == Esheep && sa->getTag() == Ehero)
+			//else if (sa->getTag() == Esheep && sa->getTag() == Ehero)
 				toDestroy_list.push_back(bodyA);
 		}
 	}
@@ -255,10 +251,10 @@ void MapLayer::physicalUpdate(float dt)
 			CCSprite* sprite = (CCSprite*)((*it)->GetUserData());
 			if (sprite)
 			{
-				//sprite->stopActionByTag(EASmoveTo);
-				removeChild(sprite, true);
+				sprite->stopActionByTag(EASmoveTo);
+				//removeChild(sprite, true);
 			}
-			m_world->DestroyBody(*it);
+			//m_world->DestroyBody(*it);
 		}
 
 		++it;

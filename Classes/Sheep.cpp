@@ -95,6 +95,7 @@ void Sheep::attachBodyForSprite( b2World* world )
 	//spriteBodyDef.userData = sprite;
 
 	setB2Body(world->CreateBody(&spriteBodyDef));
+	m_b2Body->SetUserData(m_sheep);
 	//m_sheep = body->setB2Body(body);
 	//m_b2Sprite->m_body = body;
 	//m_b2Sprite->m_body(spriteBody);
